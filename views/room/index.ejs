@@ -1,10 +1,14 @@
 <h2>Room一覧</h2>
-<div>
-  <% for (room in rooms) { %>
-    <ul>
-      <li>部屋名：<%= room.name %></li>
-      <li>作成者：<%= user.name %></li>
-      <li><a href="/room/<%= room.id %>/?user_id=<%= user.id %>">入室</a></li>
-    </ul>
-  <% } %>
-</div>
+<div style="text-align: right;"><a href="/room/new?user_id=<%= user.id %>">新規作成</a></div>
+<table>
+  <% rooms.forEach(function(room){ %>
+    <tr>
+      <td>部屋名：</td><td><%= room.name %></td>
+    </tr>
+    <tr>
+      <td>作成者：</td><td><%= user.name %></td>
+    </tr>
+      <td><a href="/comment/?room_id=<%= room.id %>&user_id=<%= user.id %>">入室</a></td>
+    </tr>
+  <% }); %>
+</table>

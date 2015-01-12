@@ -21,9 +21,9 @@ module.exports = {
   },
   create: function (req,res) {
     User.findOne({id: req.param('user_id')}).exec(function(err, user){
-      Room.create({user_id: req.param('user_id'), name: req.param('name')}).exec(function(err, room){
-        res.redirect("/room/?user_id=" + room.user_id);
+      Room.create({userId: req.param('user_id'), name: req.param('name')}).exec(function(err, room){
+        res.redirect("/room/?user_id=" + req.param('user_id'));
       });
     });
-  },
+  }
 };

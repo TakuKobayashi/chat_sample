@@ -1,0 +1,6 @@
+<h2>Room作成</h2>
+<form action="/room/create" method="post">
+  名前：<input type='text' name='name'></input>
+  <input type="hidden" name="user_id" value="<%= user.id %>">
+  <input type="submit" value="作成">
+</form>
