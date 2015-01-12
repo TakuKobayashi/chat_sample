@@ -2,16 +2,17 @@ var dbm = require('db-migrate');
 var type = dbm.dataType;
 
 exports.up = function(db, callback) {
-  db.createTable('user', {
+  db.createTable('room', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    name: 'string',  // shorthand notation
+    user_id: { type: 'int', notNull: true},
+    name: 'string',
     updatedAt: 'datetime',
     createdAt: 'datetime'
   }, function(){
-    db.addIndex('user', 'user_name_index', 'name', callback)
+    db.addIndex('room', 'room_user_id_index', 'user_id', callback);
   });
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('user', callback);
+  db.dropTable('room', callback);
 };

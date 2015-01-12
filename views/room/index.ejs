@@ -1,0 +1,10 @@
+<h2>Room一覧</h2>
+<div>
+  <% for (room in rooms) { %>
+    <ul>
+      <li>部屋名：<%= room.name %></li>
+      <li>作成者：<%= user.name %></li>
+      <li><a href="/room/<%= room.id %>/?user_id=<%= user.id %>">入室</a></li>
+    </ul>
+  <% } %>
+</div>
