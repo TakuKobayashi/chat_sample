@@ -14,29 +14,29 @@
 <script src="/js/jquery.min.js"></script>
 <script type='text/javascript'>
 $(function(){
-  var socket = window.io.connect();
+  var io = window.io;
   var userId = <%= user.id %>;
   var roomId = <%= room.id %>;
+  var connection = io.connect("/comment/", {user_id: userId, room_id: roomId});
   var insertComment = function(params){
-    var commentMessage = '<tr><td>ID:</td><td>'+params.id+'</td></tr><tr><td>'params.message+'</td></tr>';
+    var commentMessage = '<tr><td>ID:</td><td>'+params.id+'</td></tr><tr><td>' + params.message+'</td></tr>';
     $('#message_list').append(commentMessage);
   };
-  socket.on('connect', function() {
+  connection.on('connect', function(s) {
     // 以下の処理はSocket.IOのconnectメッセージ受信後(接続確立後)
     // に行わないと失敗する
-    socket.on('message',function(msg){
+    connection.on('comment',function(msg){
       console.log(msg);
       var model = msg['model'];
       console.log(model);
       if(model=='comment') { //commentメッセージ時の処理を追加
-        insertComment(model.data);
+        insertComment(msg['data']);
       }
     });
   });
   $('#send').click(function(){//メッセージの送信
-    socket.post('/comment/create', {user_id: userId, message: $('#message').val(), room_id: roomId}, function(res){
-      console.log(res);
-      socket.get("/comment/" + res.id + "/", function(comment) {
+    io.socket.post('/comment/create', {user_id: userId, message: $('#message').val(), room_id: roomId}, function(res){
+      io.socket.get("/comment/" + res.id + "/", function(comment) {
         insertComment(comment);
       });
     });

@@ -8,7 +8,7 @@
     <tr>
       <td>作成者：</td><td><%= user.name %></td>
     </tr>
-      <td><a href="/comment/?room_id=<%= room.id %>&user_id=<%= user.id %>">入室</a></td>
+      <td><a href="/room/show/<%= room.id %>/?user_id=<%= user.id %>">入室</a></td>
     </tr>
   <% }); %>
 </table>
