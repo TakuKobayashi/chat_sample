@@ -27,7 +27,6 @@ module.exports = {
   },
   show: function (req,res) {
     User.findOne({id: req.param('user_id')}).exec(function(err, user){
-      console.log(req.allParams());
       Room.findOne({id: req.param('id')}).exec(function(err, room){
         Comment.find().where({roomId: req.param('id')}).exec(function(err, comments){
             Comment.subscribe(req.socket);

@@ -17,29 +17,22 @@ $(function(){
   var io = window.io;
   var userId = <%= user.id %>;
   var roomId = <%= room.id %>;
-  var connection = io.connect("/comment/", {user_id: userId, room_id: roomId});
+  var connection = io.connect();
   var insertComment = function(params){
-    var commentMessage = '<tr><td>ID:</td><td>'+params.id+'</td></tr><tr><td>' + params.message+'</td></tr>';
+    var commentMessage = '<tr><td>ID:</td><td>'+params.id+'</td></tr><tr><td>コメント:</td><td>' + params.message+'</td></tr>';
     $('#message_list').append(commentMessage);
   };
   connection.on('connect', function(s) {
     // 以下の処理はSocket.IOのconnectメッセージ受信後(接続確立後)
     // に行わないと失敗する
+    connection.get('/comment/');
     connection.on('comment',function(msg){
       console.log(msg);
-      var model = msg['model'];
-      console.log(model);
-      if(model=='comment') { //commentメッセージ時の処理を追加
-        insertComment(msg['data']);
-      }
+      insertComment(msg);
     });
   });
   $('#send').click(function(){//メッセージの送信
-    io.socket.post('/comment/create', {user_id: userId, message: $('#message').val(), room_id: roomId}, function(res){
-      io.socket.get("/comment/" + res.id + "/", function(comment) {
-        insertComment(comment);
-      });
-    });
+    io.socket.post('/comment/create', {user_id: userId, message: $('#message').val(), room_id: roomId});
     $('#message').val('');
   });
 });
