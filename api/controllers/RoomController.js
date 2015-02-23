@@ -47,5 +47,17 @@ module.exports = {
         res.redirect("/room/?user_id=" + req.param('user_id'));
       });
     });
+  },
+  join: function(req, res){
+    Socket.create({connectionType: "Room", connectionId: req.param('id'), socketId: res.socket.id}).exec(function(err, model){
+      if (err) {return res.serverError();}
+      res.status(200);
+    });
+  },
+  leave: function(req, res){
+    Socket.destroy({socketId: res.socket.id}).exec(function(err, model){
+      if (err) {return res.serverError();}
+      res.status(200);
+    });
   }
 };

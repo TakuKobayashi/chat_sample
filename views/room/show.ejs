@@ -25,7 +25,7 @@ $(function(){
   connection.on('connect', function(s) {
     // 以下の処理はSocket.IOのconnectメッセージ受信後(接続確立後)
     // に行わないと失敗する
-    connection.get('/comment/');
+    connection.get('/room/join', {id: roomId});
     connection.on('comment',function(msg){
       console.log(msg);
       insertComment(msg);
@@ -35,5 +35,8 @@ $(function(){
     io.socket.post('/comment/create', {user_id: userId, message: $('#message').val(), room_id: roomId});
     $('#message').val('');
   });
+  window.addEventListener("unload", function() {
+    connection.get('/room/leave', {id: roomId});
+  }, false);
 });
 </script>
