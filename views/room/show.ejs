@@ -22,18 +22,20 @@ $(function(){
     var commentMessage = '<tr><td>ID:</td><td>'+params.id+'</td></tr><tr><td>コメント:</td><td>' + params.message+'</td></tr>';
     $('#message_list').append(commentMessage);
   };
-  connection.on('connect', function(s) {
-    // 以下の処理はSocket.IOのconnectメッセージ受信後(接続確立後)
-    // に行わないと失敗する
-    connection.get('/room/join', {id: roomId});
-    connection.on('comment',function(msg){
-      console.log(msg);
-      insertComment(msg);
-    });
+  console.log(connection);
+  connection.onconnect(function(s) {
+    console.log(s);
+  });
+  connection.on('comment',function(msg){
+    console.log(msg);
+    insertComment(msg);
   });
   $('#send').click(function(){//メッセージの送信
-    io.socket.post('/comment/create', {user_id: userId, message: $('#message').val(), room_id: roomId});
-    $('#message').val('');
+    io.socket.request({
+      method: 'post', 
+      params: {user_id: userId, message: $('#message').val(), room_id: roomId}, 
+      url: '/comment/create'
+    });
   });
   window.addEventListener("unload", function() {
     connection.get('/room/leave', {id: roomId});
